@@ -1,0 +1,31 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_solo
+
+platforms:
+- name: centos65
+  driver_config:
+    box: centos65
+    box_url: https://s3-us-west-2.amazonaws.com/misheska/vagrant/virtualbox4.3.6/centos65.box
+    network:
+    - ["private_network", {ip: "33.33.33.10"}]
+- name: ubuntu1204
+  driver_config:
+    box: precise64
+    box_url: https://s3-us-west-2.amazonaws.com/misheska/vagrant/virtualbox4.3.6/ubuntu1204.box
+    network:
+    - ["private_network", {ip: "33.33.33.11"}]
+  run_list:
+  - recipe[apt::default]
+
+suites:
+- name: default
+  run_list: ["recipe[myface::default]"]
+  attributes:
+    mysql:
+      server_root_password: "rootpass"
+      server_debian_password: "debpass"
+      server_repl_password: "replpass"
